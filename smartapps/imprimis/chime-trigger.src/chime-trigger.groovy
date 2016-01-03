@@ -31,7 +31,7 @@ preferences {
 		input "switches", "capability.switch", title: "Switch?", required: false, multiple: true
 	}
 	section("Then sound chime connected as..."){
-		input "chime", "capability.switch", title: "Chime"
+		input "chime", "capability.switch", title: "Chime", required: false
 	}
 }
 
@@ -61,17 +61,20 @@ def subscribe() {
 }
 
 /*
- * 
+ * Handle events from all the triggers.
  */
 def triggerHandler(evt) {
 	log.debug "trigger event: $evt.device $evt.value"
 
-	// turn off the switch just in case if was left on
-	chime.off()
+    if (chime)
+    {
+		// turn off the switch just in case if was left on
+		chime.off()
     
-	// turn wth switch on (which causes a positive edge triggered chime)
-    chime.on()
+		// turn wth switch on (which causes a positive edge triggered chime)
+    	chime.on()
     
-	// turn the switch off again
-    chime.off()
+		// turn the switch off again
+    	chime.off()
+    }
 }
